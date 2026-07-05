@@ -1,0 +1,29 @@
+# Requires ingress-nginx to be installed on the kind cluster first
+# (see README step 3) - that's what actually implements this Ingress
+# as a real listener on your machine's localhost.
+#
+# Only one rule is needed here: everything goes to "presentation",
+# because its nginx config already proxies /api and /health through
+# to the "application" service internally. The browser therefore only
+# ever talks to ONE origin - no CORS anywhere in this stack.
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: quickpoll-ingress
+  namespace: quickpoll
+  # No rewrite-target annotation - we want paths to reach presentation's
+  # nginx unchanged, since it needs to see the full path (e.g. /api/polls)
+  # to decide whether to proxy it to the application service or serve
+  # static content.
+spec:
+  ingressClassName: nginx
+  rules:
+    - http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: presentation
+                port:
+                  number: 8080

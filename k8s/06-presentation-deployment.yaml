@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: presentation
+  namespace: quickpoll
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: presentation
+  template:
+    metadata:
+      labels:
+        app: presentation
+        version: stable
+    spec:
+      containers:
+        - name: presentation
+          # Load with: kind load docker-image quickpoll-presentation:latest --name quickpoll
+          image: quickpoll-presentation:latest
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8080
+          readinessProbe:
+            httpGet: { path: /, port: 8080 }
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          resources:
+            requests: { cpu: "50m", memory: "64Mi" }
+            limits: { cpu: "200m", memory: "128Mi" }
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: presentation
+  namespace: quickpoll
+spec:
+  type: ClusterIP    # the Ingress is what's actually reachable from your browser
+  selector:
+    app: presentation
+  ports:
+    - port: 8080
+      targetPort: 8080

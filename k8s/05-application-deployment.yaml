@@ -1,0 +1,64 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: application
+  namespace: quickpoll
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: application
+  template:
+    metadata:
+      labels:
+        app: application
+    spec:
+      containers:
+        - name: application
+          # kind doesn't use a registry by default - after building this
+          # image locally, load it with:
+          #   kind load docker-image quickpoll-application:latest --name quickpoll
+          image: quickpoll-application:latest
+          imagePullPolicy: IfNotPresent   # use the image already loaded into kind's nodes
+          ports:
+            - containerPort: 5000
+          env:
+            - name: DB_HOST
+              valueFrom:
+                configMapKeyRef: { name: quickpoll-config, key: DB_HOST }
+            - name: DB_PORT
+              valueFrom:
+                configMapKeyRef: { name: quickpoll-config, key: DB_PORT }
+            - name: DB_NAME
+              valueFrom:
+                configMapKeyRef: { name: quickpoll-config, key: DB_NAME }
+            - name: DB_USER
+              valueFrom:
+                secretKeyRef: { name: quickpoll-secret, key: DB_USER }
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef: { name: quickpoll-secret, key: DB_PASSWORD }
+          readinessProbe:
+            httpGet: { path: /health, port: 5000 }
+            initialDelaySeconds: 10
+            periodSeconds: 10
+          livenessProbe:
+            httpGet: { path: /health, port: 5000 }
+            initialDelaySeconds: 20
+            periodSeconds: 20
+          resources:
+            requests: { cpu: "100m", memory: "128Mi" }
+            limits: { cpu: "500m", memory: "256Mi" }
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: application
+  namespace: quickpoll
+spec:
+  type: ClusterIP
+  selector:
+    app: application
+  ports:
+    - port: 5000
+      targetPort: 5000

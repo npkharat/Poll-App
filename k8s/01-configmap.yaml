@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: quickpoll-config
+  namespace: quickpoll
+data:
+  DB_HOST: "mysql"     # Kubernetes Service name - resolved via cluster DNS
+  DB_PORT: "3306"
+  DB_NAME: "polldb"

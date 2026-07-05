@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📊</text></svg>">
+<title>QuickPoll</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="bg-glow"></div>
+
+<div class="container">
+  <header>
+    <div class="brand">
+      <span class="brand-icon">📊</span>
+      <div>
+        <h1>QuickPoll</h1>
+        <p class="subtitle">Tier 1: Presentation — a 3-tier practice app for kind</p>
+      </div>
+    </div>
+    <button class="btn btn-primary" id="newPollBtn">+ New Poll</button>
+  </header>
+
+  <div id="banner" class="banner" style="display:none;"></div>
+
+  <div class="poll-grid" id="pollGrid"></div>
+  <div class="empty-state" id="emptyState" style="display:none;">
+    <p>No polls yet. Create the first one!</p>
+  </div>
+</div>
+
+<!-- New poll modal -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal">
+    <h2>Create a Poll</h2>
+    <form id="pollForm">
+      <div class="form-row">
+        <label>Question</label>
+        <input type="text" id="questionInput" placeholder="e.g. Favorite CI/CD tool?" required maxlength="255">
+      </div>
+      <label>Options (2–8)</label>
+      <div id="optionsList" class="options-list"></div>
+      <button type="button" class="btn btn-ghost" id="addOptionBtn">+ Add option</button>
+      <div id="formError" class="error-text" style="display:none;"></div>
+      <div class="modal-actions">
+        <button type="button" class="btn btn-ghost" id="cancelBtn">Cancel</button>
+        <button type="submit" class="btn btn-primary">Create Poll</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script src="config.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
