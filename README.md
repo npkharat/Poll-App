@@ -1,4 +1,4 @@
-# QuickPoll — 3-Tier App for Practicing on kind
+# QuickPoll — 3-Tier Application for Hands-on Practice on Kind with Canary Deployment Implementation
 
 A polling app built specifically to practice deploying a 3-tier
 application to a **kind** (Kubernetes-in-Docker) cluster: no cloud
@@ -145,7 +145,7 @@ tiers — that's the point of keeping tiers (and their manifests) separate.
 
 ## 9. Try Canary Deployment
 
-I have created two HTML pages, so I will build two separate Docker images:
+Since there are two HTML pages, we will build two separate Docker images and ensure that during the image build process, each HTML file is renamed to index.html and served as the container’s entry point.
 
 - `stable-presentation` → Stable version (v1)
 - `canary-presentation` → Canary version (v2)
