@@ -100,7 +100,7 @@ kubectl cluster-info --context kind-quickpoll
 ### 3. Install ingress-nginx (kind's official recipe)
 ```bash
 kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/main/deploy/static/provider/kind/deploy.yaml
-
+```
 
 ### 4. Build the two application images
 ```bash
